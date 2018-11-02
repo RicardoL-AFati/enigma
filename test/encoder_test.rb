@@ -6,9 +6,8 @@ class EncoderTest < Minitest::Test
   end
 
   def test_it_generates_key_shifts_given_random_five_digits
-    skip
     random = ["1", "2", "6", "0", "5"]
-    @encoder.stubs(:get_random_five_digit_number).returns(random)
+    @encoder.stubs(:get_random_five_digit_number_array).returns(random)
 
     expected = {A: 12, B: 26, C: 60, D: 5}
 
