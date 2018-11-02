@@ -20,5 +20,6 @@ class EncoderTest < Minitest::Test
 
     assert_instance_of Array, result
     assert_equal 5, result.length
+    result.each {|number| assert number =~ /[0-9]/}
   end
 end
