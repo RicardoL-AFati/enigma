@@ -27,7 +27,7 @@ class EncoderTest < Minitest::Test
     @encoder.stubs(:get_offset_code).returns(["1", "1", "2", "4"])
 
     expected = {A: 1, B: 1, C: 2, D: 4}
-    result = @encoder.generate_offset_shifts(Time.now)
+    result = @encoder.generate_offset_shifts
 
     assert_equal expected, result
   end
@@ -36,6 +36,14 @@ class EncoderTest < Minitest::Test
     @encoder.stubs(:date_in_MM_DD_YY).returns("110318")
 
     expected = ["1", "1", "2", "4"]
+
+    assert_equal expected, @encoder.get_offset_code(Time.now)
+  end
+
+  def test_it_gets_today_in_MM_DD_YY
+    Time.stubs(:now).returns(Time.new(2018, 11, 03))
+
+    expected = "110318"
 
     assert_equal expected, @encoder.get_offset_code(Time.now)
   end
