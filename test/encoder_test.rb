@@ -24,6 +24,7 @@ class EncoderTest < Minitest::Test
 
   def test_it_generate_offset_shifts
     @encoder.stubs(:date_in_MM_DD_YY).returns("110318")
+    @encoder.stubs(:get_offset_code).returns(["1", "1", "2", "4"])
 
     expected = {A: 1, B: 1, C: 2, D: 4}
     result = @encoder.generate_offset_shifts(Time.now)
