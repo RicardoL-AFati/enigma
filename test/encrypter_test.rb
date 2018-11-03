@@ -12,4 +12,12 @@ class EncrypterTest < Mintest::Test
 
     assert_equal expected, result
   end
+
+  def test_it_shifts_an_array_of_character_forwards
+    expected = ["k", "e", "d", "e"]
+    result = @encrypter.shift(["h", "e", "l", "l"],
+      [3, 27, 73, 20])
+
+    assert_equal expected, result
+  end
 end
