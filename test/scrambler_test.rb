@@ -5,10 +5,24 @@ class ScramblerTest < Minitest::Test
     @scrambler = Scrambler.new
   end
 
+  def test_it_scrambles_a_message_forwards_or_backwards
+    expected = "keder ohulw"
+    result = @scrambler.scramble("hello world",
+      [3, 27, 73, 20], false)
+
+    assert_equal expected, result
+
+    expected = "hello world"
+    result = @scrambler.scramble("keder ohulw",
+      [3, 27, 73, 20], true)
+
+    assert_equal expected, result
+  end
+
   def test_it_shifts_an_array_of_character_forwards
     expected = "kede"
     result = @scrambler.shift(["h", "e", "l", "l"],
-      [3, 27, 73, 20])
+      [3, 27, 73, 20], false)
 
     assert_equal expected, result
   end
@@ -22,10 +36,9 @@ class ScramblerTest < Minitest::Test
   end
 
   def test_it_shifts_an_array_of_character_returning_special_characters
-    skip
     expected = "&}x!"
-    result = @encrypter.shift(["&", "}", "e", "!"],
-      [3, 27, 73, 20])
+    result = @scrambler.shift(["&", "}", "e", "!"],
+      [3, 27, 73, 20], false)
 
     assert_equal expected, result
   end
