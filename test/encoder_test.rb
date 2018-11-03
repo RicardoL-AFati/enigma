@@ -6,6 +6,7 @@ class EncoderTest < Minitest::Test
   end
 
   def test_it_has_no_key_to_start
+    skip
     assert_nil @encoder.key
   end
 
@@ -21,14 +22,10 @@ class EncoderTest < Minitest::Test
     assert_equal expected, @encoder.generate_shifts
   end
 
-  def test_it_generates_key_shifts_given_random_five_digits
-    skip
-    random = ["1", "2", "6", "0", "5"]
-    @encoder.stubs(:get_random_five_digit_number_array).returns(random)
-
+  def test_it_generates_key_shifts_given_key
     expected = {A: 12, B: 26, C: 60, D: 5}
 
-    assert_equal expected, @encoder.generate_key_shifts
+    assert_equal expected, @encoder.generate_key_shifts("12605")
   end
 
   def test_it_generates_a_random_five_digit_number_array
@@ -72,7 +69,6 @@ class EncoderTest < Minitest::Test
   def test_it_gets_date_in_DD_MM_YY
     skip
     Time.stubs(:now).returns(Time.new(2018, 11, 03))
-
     expected = "031118"
 
     assert_equal expected, @encoder.in_DD_MM_YY(Time.now)
