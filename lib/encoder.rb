@@ -42,7 +42,7 @@ class Encoder
   end
 
   def get_offset_code(date)
-    date = in_DD_MM_YY(date)
+    date = in_DD_MM_YY(date) unless date.class == String
     (date.to_i ** 2).to_s[-4..-1].chars
   end
 
