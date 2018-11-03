@@ -31,4 +31,12 @@ class EncoderTest < Minitest::Test
 
     assert_equal expected, result
   end
+
+  def test_it_gets_offset_code_given_date
+    @encoder.stubs(:date_in_MM_DD_YY).returns("110318")
+
+    expected = ["1", "1", "2", "4"]
+
+    assert_equal expected, @encoder.get_offset_code(Time.now)
+  end
 end
