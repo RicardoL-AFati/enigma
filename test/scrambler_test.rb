@@ -20,4 +20,13 @@ class ScramblerTest < Minitest::Test
 
     assert_equal expected, result
   end
+
+  def test_it_shifts_an_array_of_character_returning_special_characters
+    skip
+    expected = "&}x!"
+    result = @encrypter.shift(["&", "}", "e", "!"],
+      [3, 27, 73, 20])
+
+    assert_equal expected, result
+  end
 end
