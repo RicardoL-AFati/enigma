@@ -3,7 +3,7 @@ class Encrypter
           "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z", " "]
 
   def encrypt(message, shifts)
-    message_chars = message.chars
+    message_chars = message.downcase.chars
     encrypted = ""
 
     until message_chars.empty?
@@ -14,6 +14,7 @@ class Encrypter
 
   def shift(characters, shifts)
     characters.each_with_index.map do |char, index|
+      return char unless char =~ /[a-z ]/
       original_index = ABC_.index(char)
       ABC_[(original_index + shifts[index]) % 27]
     end.join
