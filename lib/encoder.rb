@@ -1,8 +1,14 @@
 class Encoder
   def generate_shifts
+    key_shifts = generate_key_shifts
+    offset_shifts = generate_offset_shifts
 
+    key_shifts.keys.reduce({}) do |shifts, letter|
+      shifts[letter] = key_shifts[letter] + offset_shifts[letter]
+      shifts
+    end
   end
-  
+
   def generate_key_shifts
     random_key = get_random_five_digit_number_array
     random_key.each_with_index.reduce(empty_shifts) do |shifts, (digit, index)|
