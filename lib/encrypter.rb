@@ -14,7 +14,7 @@ class Encrypter
 
   def shift(characters, shifts)
     characters.each_with_index.map do |char, index|
-      return char unless char =~ /[a-z ]/
+      next char unless char =~ /[a-z ]/
       original_index = ABC_.index(char)
       ABC_[(original_index + shifts[index]) % 27]
     end.join
