@@ -16,7 +16,7 @@ class ScramblerTest < Minitest::Test
   def test_it_shifts_an_array_of_character_backwards
     expected = "hell"
     result = @scrambler.shift(["k", "e", "d", "e"],
-      [3, 27, 73, 20])
+      [3, 27, 73, 20], true)
 
     assert_equal expected, result
   end
