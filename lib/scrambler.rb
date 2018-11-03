@@ -7,7 +7,7 @@ class Scrambler
     scrambled = ""
 
     until message_chars.empty?
-      decrypted += shift(message_chars.slice!(0, 4), shifts, backwards)
+      scrambled += shift(message_chars.slice!(0, 4), shifts, backwards)
     end
     scrambled
   end
