@@ -14,14 +14,12 @@ class Encoder
     end
   end
 
-  def generate_key_shifts(given_key = nil)
+  def generate_key_shifts(given_key)
     @key = given_key.chars if given_key
     get_random_five_digit_number_array unless @key
     key_shifts = key.each_with_index.reduce(empty_shifts) do |shifts, (digit, index)|
-      shifts[:A] += digit if index == 0 || index == 1
-      shifts[:B] += digit if index == 1 || index == 2
-      shifts[:C] += digit if index == 2 || index == 3
-      shifts[:D] += digit if index == 3 || index == 4
+      next shifts if index == 4
+      shifts[shifts.keys[index]] += key[index] + key[index + 1]
       shifts
     end.transform_values!(&:to_i)
     @key = nil
