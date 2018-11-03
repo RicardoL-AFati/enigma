@@ -4,9 +4,9 @@ class Encoder
     @key = nil
   end
 
-  def generate_shifts
-    key_shifts = generate_key_shifts
-    offset_shifts = generate_offset_shifts
+  def generate_shifts(key = nil, date = Time.now)
+    key_shifts = generate_key_shifts(key)
+    offset_shifts = generate_offset_shifts(date)
 
     key_shifts.keys.reduce({}) do |shifts, letter|
       shifts[letter] = key_shifts[letter] + offset_shifts[letter]
@@ -28,7 +28,7 @@ class Encoder
     key_shifts
   end
 
-  def generate_offset_shifts(date = Time.now)
+  def generate_offset_shifts(date)
     code = get_offset_code(date)
     code.each_with_index.reduce(empty_shifts) do |shifts, (num, index)|
       shifts[shifts.keys[index]] = num.to_i
