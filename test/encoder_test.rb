@@ -22,7 +22,7 @@ class EncoderTest < Minitest::Test
     result.each {|number| assert number =~ /[0-9]/}
   end
 
-  def test_it_generate_offset_shifts
+  def test_it_generate_offset_shifts_for_today
     @encoder.stubs(:date_in_MM_DD_YY).returns("110318")
     @encoder.stubs(:get_offset_code).returns(["1", "1", "2", "4"])
 
@@ -32,7 +32,14 @@ class EncoderTest < Minitest::Test
     assert_equal expected, result
   end
 
-  def test_it_gets_offset_code_given_date
+  def test_it_generate_offset_shifts_for_given_time
+    expected = {A: 8, B: 9, C: 0, D: 0}
+    result = @encoder.generate_offset_shifts(Time.new(1970, 01, 01))
+
+    assert_equal expected, result
+  end
+
+  def test_it_gets_offset_code_for_date
     Time.stubs(:now).returns(Time.new(2018, 11, 03))
     @encoder.stubs(:date_in_MM_DD_YY).returns("110318")
 
@@ -43,7 +50,7 @@ class EncoderTest < Minitest::Test
 
   def test_it_gets_date_in_MM_DD_YY
     Time.stubs(:now).returns(Time.new(2018, 11, 03))
-e
+
     expected = "110318"
 
     assert_equal expected, @encoder.in_MM_DD_YY(Time.now)
