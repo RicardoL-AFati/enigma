@@ -1,4 +1,9 @@
 class Encoder
+  attr_reader :key
+  def initialize
+    @key = nil
+  end
+
   def generate_shifts
     key_shifts = generate_key_shifts
     offset_shifts = generate_offset_shifts
@@ -10,14 +15,16 @@ class Encoder
   end
 
   def generate_key_shifts
-    random_key = get_random_five_digit_number_array
-    random_key.each_with_index.reduce(empty_shifts) do |shifts, (digit, index)|
+    get_random_five_digit_number_array unless @key
+    key_shifts = key.each_with_index.reduce(empty_shifts) do |shifts, (digit, index)|
       shifts[:A] += digit if index == 0 || index == 1
       shifts[:B] += digit if index == 1 || index == 2
       shifts[:C] += digit if index == 2 || index == 3
       shifts[:D] += digit if index == 3 || index == 4
       shifts
     end.transform_values!(&:to_i)
+    @key = nil
+    key_shifts
   end
 
   def generate_offset_shifts(date = Time.now)
@@ -32,7 +39,7 @@ class Encoder
     random = rand(9999999999999).to_s.chars.shuffle.slice(0, 5)
 
     (5 - random.length).times { random.unshift("0") } if random.length < 5
-    random
+    @key = random
   end
 
   def get_offset_code(date)
