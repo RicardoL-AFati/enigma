@@ -7,11 +7,14 @@ class Enigma
 
   def encrypt(message, key = nil, date = nil)
     key = @encoder.get_random_five_digit_number_array.join unless key
-    
-    shifts = @encoder.generate_shifts.values unless key || date
+    date = @encoder.in_DD_MM_YY(Time.now) unless date
+    shifts = @encoder.generate_shifts(key, date).values
+    encrypted = @encrypter.encrypt(message, shifts)
 
-
-    encrypted = @encrypter.encrypt(message, shifts) unless key || date
-
+    {
+      encryption: encrypted,
+      key: key,
+      date: date
+    }
   end
 end
