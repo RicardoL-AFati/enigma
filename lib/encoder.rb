@@ -30,7 +30,11 @@ class Encoder
   end
 
   def get_offset_code(date)
-    date = date_in_MM_DD_YY(date)
+    date = in_MM_DD_YY(date)
     (date.to_i ** 2).to_s[-4..-1].chars
+  end
+
+  def in_MM_DD_YY(date)
+    date.strftime("%m%d%y")
   end
 end
