@@ -1,11 +1,7 @@
+require './lib/scrambler'
+
 class Encrypter < Scrambler
   def encrypt(message, shifts)
-    message_chars = message.downcase.chars
-    encrypted = ""
-
-    until message_chars.empty?
-      encrypted += shift(message_chars.slice!(0, 4), shifts)
-    end
-    encrypted
+    scramble(message, shifts, false)
   end
 end
