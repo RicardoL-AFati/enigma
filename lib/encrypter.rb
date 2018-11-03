@@ -1,4 +1,4 @@
-class Encrypter
+class Encrypter < Scrambler
   def encrypt(message, shifts)
     message_chars = message.downcase.chars
     encrypted = ""
