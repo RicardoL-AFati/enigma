@@ -4,12 +4,12 @@ class Encrypter
 
   def encrypt(message, shifts)
     message_chars = message.chars
-    encrypted = []
+    encrypted = ""
 
     until message_chars.empty?
-      encrypted << shift(message_chars.slice!(0, 4), shifts.values)
+      encrypted += shift(message_chars.slice!(0, 4), shifts.values)
     end
-    encrypted.flatten.join
+    encrypted
   end
 
   def shift(characters, shifts)
