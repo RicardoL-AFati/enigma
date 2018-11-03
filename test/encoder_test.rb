@@ -21,4 +21,13 @@ class EncoderTest < Minitest::Test
     assert_equal 5, result.length
     result.each {|number| assert number =~ /[0-9]/}
   end
+
+  def test_it_generate_offset_shifts
+    @encoder.stubs(:date_in_MM_DD_YY).returns("110318")
+
+    expected = {A: 1, B: 1, C: 2, D: 4}
+    result = @encoder.generate_offset_shifts(Time.now)
+
+    assert_equal expected, result
+  end
 end
