@@ -5,6 +5,17 @@ class EncoderTest < Minitest::Test
     @encoder = Encoder.new
   end
 
+  def test_it_generate_shifts_given_no_key_or_date
+    key_shifts = {A: 12, B: 26, C: 60, D: 5}
+    offset_shifts = {A: 2, B: 4, C: 5, D: 9}
+    @encoder.stubs(:generate_key_shifts).returns(key_shifts)
+    @encoder.stubs(:generate_offset_shifts).returns(offset_shifts)
+
+    expected = {A: 14, B: 30, C: 65, D: 14}
+
+    assert_equal expected, @encoder.generate_shifts
+  end
+
   def test_it_generates_key_shifts_given_random_five_digits
     random = ["1", "2", "6", "0", "5"]
     @encoder.stubs(:get_random_five_digit_number_array).returns(random)
