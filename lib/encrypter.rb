@@ -7,7 +7,7 @@ class Encrypter
     encrypted = ""
 
     until message_chars.empty?
-      encrypted += shift(message_chars.slice!(0, 4), shifts.values)
+      encrypted += shift(message_chars.slice!(0, 4), shifts)
     end
     encrypted
   end
