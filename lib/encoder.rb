@@ -8,7 +8,7 @@ class Encoder
 
   def generate_key_shifts
     random_key = get_random_five_digit_number_array
-    random_key.each_with_index.reduce(empty_shifts) do |key_shifts, (digit, index)|
+    random_key.each_with_index.reduce(empty_shifts) do |shifts, (digit, index)|
       key_shifts[:A] += digit if index == 0 || index == 1
       key_shifts[:B] += digit if index == 1 || index == 2
       key_shifts[:C] += digit if index == 2 || index == 3
@@ -18,7 +18,12 @@ class Encoder
   end
 
   def generate_offset_shifts(date = Time.now)
-    date_in_MM_DD_YY(date).chars.reduce({}) do
+    require "pry"; binding.pry
+    date_in_MM_DD_YY(date)
+    hash = mm_dd_yy.chars.each_with_index.reduce(empty_shifts) do |shifts, (num, index)|
+      shifts[empty_shifts.keys[index]] = num.to_i
+    end
+    require "pry"; binding.pry
   end
 
   def empty_shifts
