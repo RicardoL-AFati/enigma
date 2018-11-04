@@ -66,7 +66,14 @@ class EnigmaTest < Minitest::Test
   end
 
   def test_it_encrypts_a_message_given_nothing
+    Time.stubs(:now).returns(Time.new(1995, 8, 4))
 
+    result = @enigma_2.encrypt("hello world")
+
+    assert_equal 11, result[:encryption].length
+    refute_equal "hello world", result[:encryption]
+    assert_equal 5, result[:key].length
+    assert_equal "040895", result[:date]
   end
 
   def test_it_encrypts_a_message_given_key
