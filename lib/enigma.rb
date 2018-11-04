@@ -10,22 +10,14 @@ class Enigma
     date, shifts = get_date_and_shifts(key, date)
     encrypted = @encrypter.encrypt(message, shifts)
 
-    {
-      encryption: encrypted,
-      key: key,
-      date: date
-    }
+    {encryption: encrypted, key: key, date: date}
   end
 
-  def decrypt(message, key, date = nil)
+  def decrypt(ciphertext, key, date = nil)
     date, shifts = get_date_and_shifts(key, date)
-    decrypted = @decrypter.decrypt(message, shifts)
+    decrypted = @decrypter.decrypt(ciphertext, shifts)
 
-    {
-      decryption: decrypted,
-      key: key,
-      date: date
-    }
+    {decryption: decrypted, key: key, date: date}
   end
 
   def get_date_and_shifts(key, date)
