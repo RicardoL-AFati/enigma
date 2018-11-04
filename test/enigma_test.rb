@@ -131,4 +131,13 @@ class EnigmaTest < Minitest::Test
     expected = ["040895", [3, 27, 73, 20]]
     assert_equal expected, @enigma_2.get_date_and_shifts("02715", nil)
   end
+
+  def test_it_returns_date_and_shifts_given_both
+    @encoder_2.expects(:in_DD_MM_YY).never
+    @encoder_2.expects(:generate_shifts)
+      .with("02715", "040895").returns({A: 3, B: 27, C: 73, D: 20})
+
+    expected = ["040895", [3, 27, 73, 20]]
+    assert_equal expected, @enigma_2.get_date_and_shifts("02715", "040895")
+  end
 end
