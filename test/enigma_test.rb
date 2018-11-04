@@ -140,24 +140,4 @@ class EnigmaTest < Minitest::Test
     expected = ["040895", [3, 27, 73, 20]]
     assert_equal expected, @enigma_2.get_date_and_shifts("02715", "040895")
   end
-
-  def test_it_returns_final_hash_for_encryption
-    expected = {
-      encryption: "keder ohulw",
-      key: "02715",
-      date: "040895"
-    }
-
-    assert_equal expected, @enigma.return_hash("02715", "040895", encryption: "keder ohulw")
-  end
-
-  def test_it_returns_final_hash_for_decryption
-    expected = {
-      decryption: "hello world",
-      key: "02715",
-      date: "040895"
-    }
-
-    assert_equal expected, @enigma.return_hash("02715", "040895", decryption: "hello world")
-  end
 end
