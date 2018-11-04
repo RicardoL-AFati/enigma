@@ -3,6 +3,7 @@ require './lib/encrypter'
 require './lib/decrypter'
 
 class Enigma
+  attr_reader :encoder, :encrypter, :decrypter
   def initialize
     @encoder = Encoder.new
     @encrypter = Encrypter.new

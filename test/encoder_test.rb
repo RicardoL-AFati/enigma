@@ -6,12 +6,10 @@ class EncoderTest < Minitest::Test
   end
 
   def test_it_has_no_key_to_start
-    skip
     assert_nil @encoder.key
   end
 
   def test_it_generate_shifts_given_no_key_or_date
-    skip
     key_shifts = {A: 12, B: 26, C: 60, D: 5}
     offset_shifts = {A: 2, B: 4, C: 5, D: 9}
     @encoder.stubs(:generate_key_shifts).returns(key_shifts)
@@ -29,7 +27,6 @@ class EncoderTest < Minitest::Test
   end
 
   def test_it_generates_a_random_five_digit_number_array
-    skip
     result = @encoder.get_random_five_digit_number_array
 
     assert_instance_of Array, result
@@ -38,18 +35,15 @@ class EncoderTest < Minitest::Test
   end
 
   def test_it_generate_offset_shifts_for_today
-    skip
-    @encoder.stubs(:date_in_DD_MM_YY).returns("031118")
-    @encoder.stubs(:get_offset_code).returns(["9", "9", "2", "4"])
+    Time.stubs(:now).returns(Time.new(2018, 11, 3))
 
     expected = {A: 9, B: 9, C: 2, D: 4}
-    result = @encoder.generate_offset_shifts
+    result = @encoder.generate_offset_shifts(Time.now)
 
     assert_equal expected, result
   end
 
   def test_it_generate_offset_shifts_for_given_time
-    skip
     expected = {A: 8, B: 9, C: 0, D: 0}
     result = @encoder.generate_offset_shifts(Time.new(1970, 01, 01))
 
@@ -57,7 +51,6 @@ class EncoderTest < Minitest::Test
   end
 
   def test_it_gets_offset_code_for_date
-    skip
     Time.stubs(:now).returns(Time.new(2018, 11, 03))
     @encoder.stubs(:date_in_DD_MM_YY).returns("031118")
 
@@ -67,7 +60,6 @@ class EncoderTest < Minitest::Test
   end
 
   def test_it_gets_date_in_DD_MM_YY
-    skip
     Time.stubs(:now).returns(Time.new(2018, 11, 03))
     expected = "031118"
 
