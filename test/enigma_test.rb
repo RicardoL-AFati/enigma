@@ -77,7 +77,8 @@ class EnigmaTest < Minitest::Test
   end
 
   def test_it_encrypts_a_message_given_key
-    @encoder_2.expects(:generate_shifts).with("02715", "040895").returns({A: 3, B: 27, C: 73, D: 20})
+    @encoder_2.expects(:generate_shifts)
+      .with("02715", "040895").returns({A: 3, B: 27, C: 73, D: 20})
     Time.stubs(:now).returns(Time.new(1995, 8, 4))
 
     expected = {
@@ -100,7 +101,6 @@ class EnigmaTest < Minitest::Test
   end
 
   def test_it_decrypts_a_message_given_key_and_date
-    skip
     expected = {
       decryption: "hello world",
       key: "02715",
@@ -111,7 +111,6 @@ class EnigmaTest < Minitest::Test
   end
 
   def test_it_decrypts_a_message_given_key
-    skip
     Time.stubs(:now).returns(Time.new(1995, 8, 4))
 
     expected = {
@@ -121,5 +120,15 @@ class EnigmaTest < Minitest::Test
     }
 
     assert_equal expected, @enigma_2.decrypt("keder ohulw", "02715")
+  end
+
+  def test_it_returns_date_and_shifts_given_key
+    Time.stubs(:now).returns(Time.new(1995, 8, 4))
+
+    @encoder_2.expects(:generate_shifts)
+      .with("02715", "040895").returns({A: 3, B: 27, C: 73, D: 20})
+
+    expected = ["040895", [3, 27, 73, 20]]
+    assert_equal expected, @enigma_2.get_date_and_shifts("02715", nil)
   end
 end
