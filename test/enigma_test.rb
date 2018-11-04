@@ -43,8 +43,42 @@ class EnigmaTest < Minitest::Test
     assert_equal expected, @enigma_2.encrypt("hello world", "02715")
   end
 
+  def test_it_calls_methods_in_sequence_for_decryption_nothing_given
+    Time.stubs(:now).returns(Time.new(1995, 8, 4))
+
+    encryption = sequence('encryption')
+    @encoder_2.expects(:get_random_five_digit_number_array).in_sequence(encryption)
+      .returns(["0", "2", "7", "1", "5"])
+    @encoder_2.expects(:in_DD_MM_YY).in_sequence(encryption)
+      .with(Time.new(1995, 8, 4)).returns("040895")
+    @encoder_2.expects(:generate_shifts).in_sequence(encryption)
+      .with("02715", "040895").returns({A: 3, B: 27, C: 73, D: 20})
+    @encrypter_2.expects(:encrypt).in_sequence(encryption)
+      .with("hello world", [3, 27, 73, 20]).returns("keder ohulw")
+
+    expected = {
+      encryption: "keder ohulw",
+      key: "02715",
+      date: "040895"
+    }
+
+    assert_equal expected, @enigma_2.encrypt("hello world")
+  end
+
+  def test_it_encrypts_a_message_given_nothing
+    Time.stubs(:now).returns(Time.new(1995, 8, 4))
+
+    result = @enigma_2.encrypt("hello world")
+
+    assert_equal 11, result[:encryption].length
+    refute_equal "hello world", result[:encryption]
+    assert_equal 5, result[:key].length
+    assert_equal "040895", result[:date]
+  end
+
   def test_it_encrypts_a_message_given_key
-    @encoder_2.expects(:generate_shifts).with("02715", "040895").returns({A: 3, B: 27, C: 73, D: 20})
+    @encoder_2.expects(:generate_shifts)
+      .with("02715", "040895").returns({A: 3, B: 27, C: 73, D: 20})
     Time.stubs(:now).returns(Time.new(1995, 8, 4))
 
     expected = {
@@ -57,8 +91,6 @@ class EnigmaTest < Minitest::Test
   end
 
   def test_it_encrypts_a_message_given_key_and_date
-    @encoder_2.expects(:generate_shifts).with("02715", "040895").returns({A: 3, B: 27, C: 73, D: 20})
-
     expected = {
       encryption: "keder ohulw",
       key: "02715",
@@ -68,13 +100,44 @@ class EnigmaTest < Minitest::Test
     assert_equal expected, @enigma_2.encrypt("hello world", "02715", "040895")
   end
 
-  def test_it_encrypts_a_message
+  def test_it_decrypts_a_message_given_key_and_date
     expected = {
-      encryption: "keder ohulw",
+      decryption: "hello world",
       key: "02715",
       date: "040895"
     }
 
-    assert_equal expected, @enigma_2.encrypt("hello world", "02715", "040895")
+    assert_equal expected, @enigma_2.decrypt("keder ohulw", "02715", "040895")
+  end
+
+  def test_it_decrypts_a_message_given_key
+    Time.stubs(:now).returns(Time.new(1995, 8, 4))
+
+    expected = {
+      decryption: "hello world",
+      key: "02715",
+      date: "040895"
+    }
+
+    assert_equal expected, @enigma_2.decrypt("keder ohulw", "02715")
+  end
+
+  def test_it_returns_date_and_shifts_given_key
+    Time.stubs(:now).returns(Time.new(1995, 8, 4))
+
+    @encoder_2.expects(:generate_shifts)
+      .with("02715", "040895").returns({A: 3, B: 27, C: 73, D: 20})
+
+    expected = ["040895", [3, 27, 73, 20]]
+    assert_equal expected, @enigma_2.get_date_and_shifts("02715", nil)
+  end
+
+  def test_it_returns_date_and_shifts_given_both
+    @encoder_2.expects(:in_DD_MM_YY).never
+    @encoder_2.expects(:generate_shifts)
+      .with("02715", "040895").returns({A: 3, B: 27, C: 73, D: 20})
+
+    expected = ["040895", [3, 27, 73, 20]]
+    assert_equal expected, @enigma_2.get_date_and_shifts("02715", "040895")
   end
 end
