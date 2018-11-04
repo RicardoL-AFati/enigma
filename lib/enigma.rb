@@ -1,8 +1,12 @@
+require './lib/encoder'
+require './lib/encrypter'
+require './lib/decrypter'
+
 class Enigma
-  def initialize(encoder, encrypter, decrypter)
-    @encoder = encoder
-    @encrypter = encrypter
-    @decrypter = decrypter
+  def initialize
+    @encoder = Encoder.new
+    @encrypter = Encrypter.new
+    @decrypter = Decrypter.new
   end
 
   def encrypt(message, key = nil, date = nil)
