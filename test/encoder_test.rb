@@ -5,10 +5,6 @@ class EncoderTest < Minitest::Test
     @encoder = Encoder.new
   end
 
-  def test_it_has_no_key_to_start
-    assert_nil @encoder.key
-  end
-
   def test_it_generate_shifts_given_no_key_or_date
     key_shifts = {A: 12, B: 26, C: 60, D: 5}
     offset_shifts = {A: 2, B: 4, C: 5, D: 9}
@@ -20,19 +16,6 @@ class EncoderTest < Minitest::Test
     assert_equal expected, @encoder.generate_shifts
   end
 
-  def test_it_generates_key_shifts_given_key
-    expected = {A: 12, B: 26, C: 60, D: 5}
-
-    assert_equal expected, @encoder.generate_key_shifts("12605")
-  end
-
-  def test_it_generates_a_random_five_digit_number_array
-    result = @encoder.get_random_five_digit_number_array
-
-    assert_instance_of Array, result
-    assert_equal 5, result.length
-    result.each {|number| assert number =~ /[0-9]/}
-  end
 
   def test_it_generate_offset_shifts_for_today
     Time.stubs(:now).returns(Time.new(2018, 11, 3))
@@ -64,14 +47,6 @@ class EncoderTest < Minitest::Test
     expected = "031118"
 
     assert_equal expected, @encoder.in_DD_MM_YY(Time.now)
-  end
-
-  def test_it_forms_key_shifts
-    key = ["0", "2", "7", "1", "5"]
-
-    expected = {A: 2, B: 27, C: 71, D: 15}
-
-    assert_equal expected, @encoder.form_key_shifts(key)
   end
 
   def test_it_forms_offset_shifts
