@@ -14,11 +14,7 @@ class Encoder
   def generate_key_shifts(given_key)
     @key = given_key.chars if given_key
     get_random_five_digit_number_array unless @key
-    key_shifts = key.each_with_index.reduce(empty_shifts) do |shifts, (digit, index)|
-      next shifts if index == 4
-      shifts[shifts.keys[index]] += key[index] + key[index + 1]
-      shifts
-    end.transform_values!(&:to_i)
+    key_shifts = form_key_shifts(key)
     @key = nil
     key_shifts
   end
@@ -48,6 +44,14 @@ class Encoder
       shifts[letter] = key_shifts[letter] + offset_shifts[letter]
       shifts
     end
+  end
+
+  def form_key_shifts(key)
+    key.each_with_index.reduce(empty_shifts) do |shifts, (digit, index)|
+      next shifts if index == 4
+      shifts[shifts.keys[index]] += key[index] + key[index + 1]
+      shifts
+    end.transform_values!(&:to_i)
   end
 
   def in_DD_MM_YY(date)
