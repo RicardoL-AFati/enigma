@@ -20,11 +20,7 @@ class Encoder
   end
 
   def generate_offset_shifts(date)
-    code = get_offset_code(date)
-    code.each_with_index.reduce(empty_shifts) do |shifts, (num, index)|
-      shifts[shifts.keys[index]] = num.to_i
-      shifts
-    end
+    form_offset_shifts(get_offset_code(date))
   end
 
   def get_random_five_digit_number_array
@@ -47,11 +43,18 @@ class Encoder
   end
 
   def form_key_shifts(key)
-    key.each_with_index.reduce(empty_shifts) do |shifts, (digit, index)|
+    key.each_with_index.reduce(empty_shifts) do |shifts, (num, index)|
       next shifts if index == 4
       shifts[shifts.keys[index]] += key[index] + key[index + 1]
-      shifts
+      shifts g
     end.transform_values!(&:to_i)
+  end
+
+  def form_offset_shifts(offset_code)
+    offset_code.each_with_index.reduce(empty_shifts) do |shifts, (num, index)|
+      shifts[shifts.keys[index]] = num.to_i
+      shifts
+    end
   end
 
   def in_DD_MM_YY(date)
