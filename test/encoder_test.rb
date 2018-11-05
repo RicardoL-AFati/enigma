@@ -24,4 +24,10 @@ class EncoderTest < Minitest::Test
 
     assert_equal expected, @encoder.form_final_shifts(key_shifts, offset_shifts)
   end
+
+  def test_it_returns_empty_shifts
+    expected = {A: "", B: "", C: "", D: ""}
+
+    assert_equal expected, @encoder.empty_shifts
+  end
 end
