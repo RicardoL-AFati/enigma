@@ -74,6 +74,14 @@ class EncoderTest < Minitest::Test
     assert_equal expected, @encoder.form_key_shifts(key)
   end
 
+  def test_it_forms_offset_shifts
+    offset_code = ["5", "2", "2", "5"]
+
+    expected = {A: 5, B: 2, C: 2, D: 5}
+
+    assert_equal expected, @encoder.form_offset_shifts(offset_code)
+  end
+
   def test_it_forms_final_shifts
     key_shifts = {A: 18, B: 99, C: 10, D: 23}
     offset_shifts = {A: 8, B: 9, C: 0, D: 0}
