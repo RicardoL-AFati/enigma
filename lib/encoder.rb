@@ -46,7 +46,7 @@ class Encoder
     key.each_with_index.reduce(empty_shifts) do |shifts, (num, index)|
       next shifts if index == 4
       shifts[shifts.keys[index]] += key[index] + key[index + 1]
-      shifts g
+      shifts
     end.transform_values!(&:to_i)
   end
 
