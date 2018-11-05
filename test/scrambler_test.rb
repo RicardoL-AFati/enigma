@@ -29,7 +29,7 @@ class ScramblerTest < Minitest::Test
 
   def test_it_encrypts_message
     expected = "keder ohulw"
-    result = @encrypter.encrypt("hello world",
+    result = @scrambler.encrypt("hello world",
       [3, 27, 73, 20])
 
     assert_equal expected, result
@@ -45,7 +45,7 @@ class ScramblerTest < Minitest::Test
 
   def test_it_decrypts_message
     expected = "hello world"
-    result = @decrypter.decrypt("keder ohulw",
+    result = @scrambler.decrypt("keder ohulw",
       [3, 27, 73, 20])
 
     assert_equal expected, result
