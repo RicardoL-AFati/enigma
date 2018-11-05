@@ -8,10 +8,7 @@ class Encoder
     key_shifts = generate_key_shifts(key)
     offset_shifts = generate_offset_shifts(date)
 
-    key_shifts.keys.reduce({}) do |shifts, letter|
-      shifts[letter] = key_shifts[letter] + offset_shifts[letter]
-      shifts
-    end
+    form_final_shifts(key_shifts, offset_shifts)
   end
 
   def generate_key_shifts(given_key)
@@ -44,6 +41,13 @@ class Encoder
   def get_offset_code(date)
     date = in_DD_MM_YY(date) unless date.class == String
     (date.to_i ** 2).to_s[-4..-1].chars
+  end
+
+  def form_final_shifts(key_shifts, offset_shifts)
+    key_shifts.keys.reduce({}) do |shifts, letter|
+      shifts[letter] = key_shifts[letter] + offset_shifts[letter]
+      shifts
+    end
   end
 
   def in_DD_MM_YY(date)
