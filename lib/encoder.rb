@@ -8,30 +8,19 @@ class Encoder
     key_shifts = generate_key_shifts(key)
     offset_shifts = generate_offset_shifts(date)
 
-    key_shifts.keys.reduce({}) do |shifts, letter|
-      shifts[letter] = key_shifts[letter] + offset_shifts[letter]
-      shifts
-    end
+    form_final_shifts(key_shifts, offset_shifts)
   end
 
   def generate_key_shifts(given_key)
     @key = given_key.chars if given_key
     get_random_five_digit_number_array unless @key
-    key_shifts = key.each_with_index.reduce(empty_shifts) do |shifts, (digit, index)|
-      next shifts if index == 4
-      shifts[shifts.keys[index]] += key[index] + key[index + 1]
-      shifts
-    end.transform_values!(&:to_i)
+    key_shifts = form_key_shifts(key)
     @key = nil
     key_shifts
   end
 
   def generate_offset_shifts(date)
-    code = get_offset_code(date)
-    code.each_with_index.reduce(empty_shifts) do |shifts, (num, index)|
-      shifts[shifts.keys[index]] = num.to_i
-      shifts
-    end
+    form_offset_shifts(get_offset_code(date))
   end
 
   def get_random_five_digit_number_array
@@ -44,6 +33,28 @@ class Encoder
   def get_offset_code(date)
     date = in_DD_MM_YY(date) unless date.class == String
     (date.to_i ** 2).to_s[-4..-1].chars
+  end
+
+  def form_final_shifts(key_shifts, offset_shifts)
+    key_shifts.keys.reduce({}) do |shifts, letter|
+      shifts[letter] = key_shifts[letter] + offset_shifts[letter]
+      shifts
+    end
+  end
+
+  def form_key_shifts(key)
+    key.each_with_index.reduce(empty_shifts) do |shifts, (num, index)|
+      next shifts if index == 4
+      shifts[shifts.keys[index]] += key[index] + key[index + 1]
+      shifts
+    end.transform_values!(&:to_i)
+  end
+
+  def form_offset_shifts(offset_code)
+    offset_code.each_with_index.reduce(empty_shifts) do |shifts, (num, index)|
+      shifts[shifts.keys[index]] = num.to_i
+      shifts
+    end
   end
 
   def in_DD_MM_YY(date)
