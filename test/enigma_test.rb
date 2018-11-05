@@ -22,8 +22,8 @@ class EnigmaTest < Minitest::Test
 
   def test_it_does_not_get_random_five_given_key_and_passes_appropriate_params
     @enigma.key_encoder.expects(:get_random_five_digit_number_array).never
-    @enigma.encoder.expects(:generate_shifts).with("02715", "040895").returns({A: 3, B: 27, C: 73, D: 20})
-    @enigma.encrypter.expects(:encrypt).with("hello world", [3, 27, 73, 20]).returns("keder ohulw")
+    @enigma.expects(:generate_shifts).with("02715", "040895").returns({A: 3, B: 27, C: 73, D: 20})
+    @enigma.scrambler.expects(:encrypt).with("hello world", [3, 27, 73, 20]).returns("keder ohulw")
     Time.stubs(:now).returns(Time.new(1995, 8, 4))
 
     expected = {
@@ -35,18 +35,16 @@ class EnigmaTest < Minitest::Test
     assert_equal expected, @enigma.encrypt("hello world", "02715")
   end
 
-  def test_it_calls_methods_in_sequence_for_decryption_nothing_given
+  def test_it_calls_methods_in_sequence_for_encryption_nothing_given
     Time.stubs(:now).returns(Time.new(1995, 8, 4))
 
     encryption = sequence('encryption')
+
     @enigma.key_encoder.expects(:get_random_five_digit_number_array).in_sequence(encryption)
       .returns(["0", "2", "7", "1", "5"])
-    @enigma.key_encoder.expects(:in_DD_MM_YY).in_sequence(encryption)
-      .with(Time.new(1995, 8, 4)).returns("040895")
-    @enigma.key_encoder.expects(:generate_shifts).in_sequence(encryption)
-      .with("02715", "040895").returns({A: 3, B: 27, C: 73, D: 20})
-    @enigma.scrambler.expects(:encrypt).in_sequence(encryption)
-      .with("hello world", [3, 27, 73, 20]).returns("keder ohulw")
+    @enigma.expects(:get_date_and_shifts).in_sequence(encryption)
+      .with("02715", nil).returns("040895", [3, 27, 73, 20])
+    @enigma.scrambler.expects(:encrypt).in_sequence(encryption).returns("keder ohulw")
 
     expected = {
       encryption: "keder ohulw",
@@ -117,7 +115,7 @@ class EnigmaTest < Minitest::Test
   def test_it_returns_date_and_shifts_given_key
     Time.stubs(:now).returns(Time.new(1995, 8, 4))
 
-    @enigma.encoder.expects(:generate_shifts)
+    @enigma.expects(:generate_shifts)
       .with("02715", "040895").returns({A: 3, B: 27, C: 73, D: 20})
 
     expected = ["040895", [3, 27, 73, 20]]
@@ -141,7 +139,7 @@ class EnigmaTest < Minitest::Test
 
     expected = {A: 14, B: 30, C: 65, D: 14}
 
-    assert_equal expected, @encoder.generate_shifts
+    assert_equal expected, @enigma.generate_shifts
   end
 
   def test_it_forms_final_shifts
@@ -150,6 +148,6 @@ class EnigmaTest < Minitest::Test
 
     expected = {A: 26, B: 108, C: 10, D: 23}
 
-    assert_equal expected, @encoder.form_final_shifts(key_shifts, offset_shifts)
+    assert_equal expected, @enigma.form_final_shifts(key_shifts, offset_shifts)
   end
 end
